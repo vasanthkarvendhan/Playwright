@@ -1,0 +1,9 @@
+def test_corelocators(page:Page):
+    page.goto("https://rahulshettyacademy.com/loginpagePractise/")
+    page.get_by_label("Username:").fill("rahulshettyacademy")
+    page.get_by_label("Password:").fill("Learning@830$3mK")
+    page.get_by_role("combobox").select_option("teach")
+    page.locator("#terms").check()
+    page.get_by_role("button", name="Sign In").click()
+    #Incorrect username/password.
+    expect(page.get_by_text("Incorrect username/password.")).to_be_visible()
