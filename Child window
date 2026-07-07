@@ -1,0 +1,7 @@
+def test_childwindow(page:Page):
+    page.goto("https://rahulshettyacademy.com/loginpagePractise/")
+    with page.expect_popup() as newpageinfo:
+           page.get_by_text("Free Access to InterviewQues/ResumeAssistance/Material").click()
+           childpage=newpageinfo.value
+           text=childpage.locator(".red").text_content()
+           print(text)
