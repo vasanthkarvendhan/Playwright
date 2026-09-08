@@ -1,0 +1,18 @@
+import pytest
+
+
+@pytest.fixture (scope='session')
+def user_data(request):
+    return  request.param
+
+{
+  "user_data":[{
+    "username": "vasanthkarvendhan@gmail.com",
+    "password": "12345678"
+  },
+    {
+    "username": "vasanthkarvendhan@gmail.com",
+    "password": "12345678"
+    }
+  ]
+}
