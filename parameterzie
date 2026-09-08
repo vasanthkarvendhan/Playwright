@@ -1,0 +1,36 @@
+import json
+from pathlib import Path
+
+import pytest
+from playwright.sync_api import Playwright, expect
+
+from utilis.apibase import apiutlis
+credentials_file = Path(__file__).resolve().parent / "data" / "credentails.json"
+with credentials_file.open(encoding="utf-8") as f:
+      test_data = json.load(f)
+      print(test_data)
+      userlist = test_data['user_data']
+
+@pytest.mark.parametrize('user_data',userlist)
+def test_framework(playwright:Playwright,user_data):
+    browser=playwright.chromium.launch(headless=False)
+    context=browser.new_context()
+    page=context.new_page()
+    # JSON file path is anchored to this test module, not Pytest's working directory.
+
+
+    api_utlis = apiutlis()
+    orderid= api_utlis.createorder(playwright)
+
+    page.goto("https://rahulshettyacademy.com/client")
+    page.get_by_placeholder("email@example.com").fill(user_data["username"])
+    page.get_by_placeholder("enter your passsword").fill(user_data["password"])
+    page.locator("#login").click()
+    page.get_by_role("button",name="ORDERS").click()
+
+#order history
+
+    row=page.locator("tr").filter(has_text=orderid)
+    row.get_by_role("button",name="View").click()
+    expect(page.locator(".tagline")).to_contain_text("Thank you for Shopping With Us")
+    context.close()
